@@ -27,6 +27,12 @@ class BarChartGenerator {
     ) {
 
         prepareChartAppearance(barChart)
+        val xLabels = configureXAxisData()
+        val bars = configureYAxisData(context)
+
+        barChart.xAxis.valueFormatter = IAxisValueFormatter {
+                value, _ -> xLabels.get(value.toInt())
+        }
 
         val data: BarData = createChartData(context)
         prepareChartData(barChart, data)
@@ -50,10 +56,10 @@ class BarChartGenerator {
         chart.axisRight.setDrawLabels(false)
         chart.axisRight.isEnabled = false
 
-        chart.xAxis.valueFormatter = IAxisValueFormatter {
-                value, axis -> xLabel.get(value.toInt())
-        }
+
     }
+
+    private fun configureData(): List<Pair<String, Bar>>
 
     private fun configureXAxisData(): List<String> {
         val xLabel: ArrayList<String> = ArrayList()
@@ -69,8 +75,19 @@ class BarChartGenerator {
         return xLabel
     }
 
-    private fun configureYAxisData(): BarData {
+    private fun configureYAxisData(context: Context, List<>): BarData {
+        val values: ArrayList<BarEntry> = ArrayList()
 
+        for (i in 1 until MAX_X_VALUE) {
+            val value1: Float = 10f
+            values.add(BarEntry(i.toFloat(), value1))
+        }
+
+        val set1 = BarDataSet(values, "")
+        set1.color = context.getColor(R.color.tesco_blue)
+        val dataSets: ArrayList<IBarDataSet> = ArrayList()
+        dataSets.add(set1)
+        return BarData(dataSets)
     }
 
     private fun createChartData(context: Context): BarData {
